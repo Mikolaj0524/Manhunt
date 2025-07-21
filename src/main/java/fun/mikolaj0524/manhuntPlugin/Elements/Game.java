@@ -1,15 +1,10 @@
-package fun.mikolaj0524.manhuntPlugin;
+package fun.mikolaj0524.manhuntPlugin.Elements;
 
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -19,14 +14,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static fun.mikolaj0524.manhuntPlugin.BeforeGame.spawn;
-import static fun.mikolaj0524.manhuntPlugin.Compass.compassLore;
+import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.spawn;
+import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.world;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.compassLore;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
-import static fun.mikolaj0524.manhuntPlugin.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
 
 public class Game implements Listener {
 	public static boolean gameStatus = false;
+	public static boolean gameType = true;
 	public static boolean releaseHunters = false;
 	public static boolean releaseRunners = false;
 	private static int time = 0;
@@ -53,6 +50,13 @@ public class Game implements Listener {
 						case 2:
 							for (Player player : Bukkit.getOnlinePlayers()) {
 								player.sendTitle(ChatColor.RED + "4", "");
+								if(!gameType){
+									world.getWorldBorder().setSize(300.0);
+									world.getWorldBorder().setCenter(0,0);
+								}
+								else{
+									world.getWorldBorder().setSize(60000000);
+								}
 							}
 							break;
 						case 3:
@@ -73,6 +77,8 @@ public class Game implements Listener {
 						case 6:
 							for (Player player : Bukkit.getOnlinePlayers()) {
 								player.sendTitle(ChatColor.GREEN + "Runners released!", "");
+								player.setInvisible(false);
+								player.setInvulnerable(false);
 							}
 							for(Player player : runnersList){
 								for (PotionEffect effect : player.getActivePotionEffects()) {
@@ -88,17 +94,19 @@ public class Game implements Listener {
 							break;
 					}
 
-					if(time < 15 + 6 && time > 6){
+					if(time < 20 + 6 && time > 6){
 						for(Player player : huntersList){
-							player.sendTitle(ChatColor.GOLD + "" + (15 - (time - 6)), "");
+							player.sendTitle(ChatColor.GOLD + "" + (20 - (time - 6)), "");
 						}
 						for(Player player : runnersList){
-							player.sendMessage(ChatColor.GOLD + "Hunters will be released in " + (15 - (time - 6)) + " seconds!");
+							player.sendMessage(ChatColor.GOLD + "Hunters will be released in " + (20 - (time - 6)) + " seconds!");
 						}
 					}
-					if(time == 15 + 6){
+					if(time == 20 + 6){
 						for(Player player : huntersList){
 							player.sendTitle(ChatColor.GREEN + "GO!", "");
+							player.setInvisible(false);
+							player.setInvulnerable(false);
 						}
 						for(Player player : runnersList){
 							player.sendMessage(ChatColor.GREEN + "Hunters were released!");
@@ -143,42 +151,6 @@ public class Game implements Listener {
 		player.setHealth(20);
 		player.setExp(0.0f);
 		player.setTotalExperience(0);
-	}
-
-	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event){
-		if(event.getEntity() instanceof Player){
-			Player player = (Player) event.getEntity();
-			if(player.getHealth() - event.getDamage() < 0){
-				if(runnersList.contains(player)){
-					runnersList.remove(player);
-					event.setCancelled(true);
-					player.setGameMode(GameMode.SPECTATOR);
-					for(Player player1 : Bukkit.getOnlinePlayers()){
-						player1.sendMessage(ChatColor.RED + player.getDisplayName() + " died!");
-					}
-					checkIsEndGame();
-				}
-			}
-		}
-	}
-
-	@EventHandler
-	public void onPlayerRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
-		giveCompass(player);
-	}
-
-	@EventHandler
-	public void onEntityDeath(EntityDeathEvent event) {
-		if (event.getEntity() instanceof EnderDragon) {
-			for(Player player : Bukkit.getOnlinePlayers()){
-				Location loc = new Location(Bukkit.getWorld("world"), spawn.getX(), spawn.getY() + 1, spawn.getZ());
-				player.teleport(loc);
-				player.sendMessage(ChatColor.GOLD + "Runners team won!");
-				player.sendTitle(ChatColor.GOLD + "Runners team won!", "");
-			}
-		}
 	}
 
 	public static void checkIsEndGame(){

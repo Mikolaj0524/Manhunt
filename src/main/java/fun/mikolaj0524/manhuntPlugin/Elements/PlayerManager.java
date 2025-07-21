@@ -1,4 +1,4 @@
-package fun.mikolaj0524.manhuntPlugin;
+package fun.mikolaj0524.manhuntPlugin.Elements;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,8 +12,8 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fun.mikolaj0524.manhuntPlugin.Game.gameStatus;
-import static fun.mikolaj0524.manhuntPlugin.Game.startGame;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameType;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Game.startGame;
 
 public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 	public static ArrayList<Player> huntersList = new ArrayList<>();
@@ -40,7 +40,18 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 			return true;
 		}
 
+		if (command.getName().equalsIgnoreCase("type")) {
+			changeGameType(player);
+			return true;
+		}
+
 		return false;
+	}
+
+	private void changeGameType(Player p){
+		gameType = gameType ? false : true;
+
+		p.sendMessage(ChatColor.AQUA + "Current manhunt type: " + (gameType ? "NORMAL" : "HUNT"));
 	}
 
 	private void handleCommand(Player player, String[] args, String type) {
