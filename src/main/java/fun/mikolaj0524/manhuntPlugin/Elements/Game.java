@@ -26,7 +26,9 @@ public class Game implements Listener {
 	public static boolean gameType = true;
 	public static boolean releaseHunters = false;
 	public static boolean releaseRunners = false;
+	public static int timeForRunners = 40;
 	private static int time = 0;
+	public static float borderSize = 60000000f;
 
 	public static void timeCounter(){
 		new BukkitRunnable() {
@@ -51,11 +53,11 @@ public class Game implements Listener {
 							for (Player player : Bukkit.getOnlinePlayers()) {
 								player.sendTitle(ChatColor.RED + "4", "");
 								if(!gameType){
-									world.getWorldBorder().setSize(300.0);
+									world.getWorldBorder().setSize(borderSize);
 									world.getWorldBorder().setCenter(0,0);
 								}
 								else{
-									world.getWorldBorder().setSize(60000000);
+									world.getWorldBorder().setSize(borderSize);
 								}
 							}
 							break;
@@ -77,10 +79,10 @@ public class Game implements Listener {
 						case 6:
 							for (Player player : Bukkit.getOnlinePlayers()) {
 								player.sendTitle(ChatColor.GREEN + "Runners released!", "");
-								player.setInvisible(false);
-								player.setInvulnerable(false);
 							}
 							for(Player player : runnersList){
+								player.setInvisible(false);
+								player.setInvulnerable(false);
 								for (PotionEffect effect : player.getActivePotionEffects()) {
 									player.removePotionEffect(effect.getType());
 								}
@@ -94,15 +96,16 @@ public class Game implements Listener {
 							break;
 					}
 
-					if(time < 20 + 6 && time > 6){
+
+					if(time < timeForRunners + 6 && time > 6){
 						for(Player player : huntersList){
-							player.sendTitle(ChatColor.GOLD + "" + (20 - (time - 6)), "");
+							player.sendTitle(ChatColor.GOLD + "" + (timeForRunners - (time - 6)), "");
 						}
 						for(Player player : runnersList){
-							player.sendMessage(ChatColor.GOLD + "Hunters will be released in " + (20 - (time - 6)) + " seconds!");
+							player.sendMessage(ChatColor.GOLD + "Hunters will be released in " + (timeForRunners - (time - 6)) + " seconds!");
 						}
 					}
-					if(time == 20 + 6){
+					if(time == timeForRunners + 6){
 						for(Player player : huntersList){
 							player.sendTitle(ChatColor.GREEN + "GO!", "");
 							player.setInvisible(false);
@@ -112,6 +115,8 @@ public class Game implements Listener {
 							player.sendMessage(ChatColor.GREEN + "Hunters were released!");
 						}
 						for(Player player : huntersList){
+							player.setInvisible(false);
+							player.setInvulnerable(false);
 							for (PotionEffect effect : player.getActivePotionEffects()) {
 								player.removePotionEffect(effect.getType());
 							}

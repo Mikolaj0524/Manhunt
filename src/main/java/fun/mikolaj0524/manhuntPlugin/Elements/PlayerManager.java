@@ -12,8 +12,7 @@ import org.bukkit.event.Listener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameType;
-import static fun.mikolaj0524.manhuntPlugin.Elements.Game.startGame;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
 
 public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 	public static ArrayList<Player> huntersList = new ArrayList<>();
@@ -49,7 +48,14 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 	}
 
 	private void changeGameType(Player p){
-		gameType = gameType ? false : true;
+		if(gameType){
+			gameType = false;
+			borderSize = 300.0f;
+		}
+		else{
+			gameType = true;
+			borderSize = 60000000f;
+		}
 
 		p.sendMessage(ChatColor.AQUA + "Current manhunt type: " + (gameType ? "NORMAL" : "HUNT"));
 	}
@@ -101,21 +107,29 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 			completeList.add("remove");
 			completeList.add("list");
 		} else if (args.length == 2) {
-			ArrayList<Player> list = command.getName().equalsIgnoreCase("hunters") ? huntersList : runnersList;
+			boolean isHunters = command.getName().equalsIgnoreCase("hunters");
+
+			List<String> selfList = (isHunters ? huntersList : runnersList).stream()
+					.map(Player::getName)
+					.toList();
+			List<String> oppositeList = (isHunters ? runnersList : huntersList).stream()
+					.map(Player::getName)
+					.toList();
 
 			if (args[0].equalsIgnoreCase("add")) {
 				for (Player p : Bukkit.getOnlinePlayers()) {
-					if (!list.contains(p)) {
-						completeList.add(p.getName());
+					String name = p.getName();
+					if (!selfList.contains(name) && !oppositeList.contains(name)) {
+						completeList.add(name);
 					}
 				}
 			} else if (args[0].equalsIgnoreCase("remove")) {
-				for (Player p : list) {
-					completeList.add(p.getName());
-				}
+				completeList.addAll(selfList);
 			}
 		}
 
 		return completeList;
 	}
+
+
 }

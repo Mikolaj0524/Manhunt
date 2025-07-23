@@ -16,12 +16,12 @@ public class Timer {
 	public static int timer = 0;
 
 	public static void Timer(){
-		int time = 7;
+		int time = 8;
 
 		new BukkitRunnable() {
 			@Override
 			public void run() {
-				if(releaseRunners){
+				if(releaseHunters){
 					if(gameType){
 						timer++;
 					}
