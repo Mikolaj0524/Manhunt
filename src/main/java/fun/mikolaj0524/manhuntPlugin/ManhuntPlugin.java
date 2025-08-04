@@ -33,13 +33,7 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 		getServer().getPluginManager().registerEvents(new Advancement(), this);
 
-
-		getCommand("startmanhunt").setExecutor(new PlayerManager());
-		getCommand("hunters").setExecutor(new PlayerManager());
-		getCommand("hunters").setTabCompleter(new PlayerManager());
-		getCommand("runners").setExecutor(new PlayerManager());
-		getCommand("runners").setTabCompleter(new PlayerManager());
-		getCommand("settings").setExecutor(new PlayerManager());
+		getCommand("manhunt").setExecutor(new PlayerManager());
 
 		if(getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
 			PlaceholderAPIHook.registerHook();

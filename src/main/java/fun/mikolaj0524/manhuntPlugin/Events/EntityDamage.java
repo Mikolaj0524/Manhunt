@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.checkIsEndGame;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameStatus;
 import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class EntityDamage implements Listener {
 
@@ -24,7 +25,7 @@ public class EntityDamage implements Listener {
 					event.setCancelled(true);
 					player.setGameMode(GameMode.SPECTATOR);
 					for(Player player1 : Bukkit.getOnlinePlayers()){
-						player1.sendMessage(ChatColor.RED + player.getDisplayName() + " died!");
+						player1.sendMessage(" \n " + prefix + ChatColor.RED + player.getDisplayName() + " died! \n ");
 					}
 					checkIsEndGame();
 				}

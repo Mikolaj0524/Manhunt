@@ -147,6 +147,12 @@ public class Game implements Listener {
 
 	public static void startGame(){
 		gameStatus = true;
+		World world = Bukkit.getWorld("world");
+
+		if (world != null) {
+			world.setTime(1000);
+			world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+		}
 	}
 
 	public static void preparePlayer(Player player){

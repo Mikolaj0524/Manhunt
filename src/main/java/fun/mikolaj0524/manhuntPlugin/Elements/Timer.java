@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.spawn;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class Timer {
 
@@ -34,7 +35,7 @@ public class Timer {
 								player.setGameMode(GameMode.ADVENTURE);
 								gameStatus = false;
 								player.teleport(loc);
-								player.sendMessage(ChatColor.GOLD + "Runners team won!");
+								player.sendMessage(" \n " + prefix + "Runners team won!\n ");
 								player.sendTitle(ChatColor.GOLD + "Runners team won!", "");
 								player.setInvulnerable(true);
 								player.setInvisible(true);

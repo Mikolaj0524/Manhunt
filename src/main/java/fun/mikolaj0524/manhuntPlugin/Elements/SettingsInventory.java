@@ -8,24 +8,59 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Timer.*;
 
 public class SettingsInventory implements Listener {
 
 	public static final String invName = ChatColor.translateAlternateColorCodes('&', "        &4&lManhunt settings");
+	public static final String invName2 = ChatColor.translateAlternateColorCodes('&', "&4             &lPlayer list");
+	private static final int invSize = 9 * 5;
 
 	public static void createInventory(Player player){
-		Inventory inventory = Bukkit.createInventory(player, 27, invName);
-		for(int i = 0; i < 27; i++){
-
+		Inventory inventory = Bukkit.createInventory(player, invSize, invName);
+		for(int i = 0; i < invSize; i++){
 			inventory.setItem(i, createItemStack(Material.GRAY_STAINED_GLASS_PANE, " "));
 		}
+		inventory.setItem(31, createItemStack(Material.DRAGON_EGG, ChatColor.translateAlternateColorCodes('&', "&a&lStart!")));
+
+		inventory.setItem(34, createItemStack(Material.PLAYER_HEAD, ChatColor.translateAlternateColorCodes('&', "&e&lPlayer list")));
+
 		reloadIcons(inventory);
 		player.openInventory(inventory);
+	}
+
+	public static void createInventory2(Player player){
+		Inventory inventory = Bukkit.createInventory(player, 27, invName2);
+		for(int i = 0; i < 9; i++){
+			inventory.setItem(i, createItemStack(Material.GRAY_STAINED_GLASS_PANE, " "));
+		}
+		for(int i = 18; i < 27; i++){
+			inventory.setItem(i, createItemStack(Material.GRAY_STAINED_GLASS_PANE, " "));
+		}
+
+		inventory.setItem(22, createItemStack(Material.BARRIER, "&cGo back!"));
+
+		int index = 9;
+		for(Player p : Bukkit.getOnlinePlayers()){
+			inventory.setItem(index, createItemStack(p, (huntersList.contains(p) ? "&aH - " : (runnersList.contains(p) ? "&cR - " : "&eU - ")) + "&l" + p.getDisplayName()));
+			index++;
+		}
+		player.openInventory(inventory);
+	}
+
+	public static void reloadPlayers(Inventory inventory){
+		int index = 9;
+		for(Player p : Bukkit.getOnlinePlayers()){
+			inventory.setItem(index, createItemStack(p, (huntersList.contains(p) ? "&aH - " : (runnersList.contains(p) ? "&cR - " : "&eU - ")) + "&l" + p.getDisplayName()));
+			index++;
+		}
 	}
 
 	public static void reloadIcons(Inventory inventory){
@@ -98,4 +133,16 @@ public class SettingsInventory implements Listener {
 		return itemStack;
 	}
 
+	private static ItemStack createItemStack(Player player, String name) {
+		ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		if (itemMeta instanceof SkullMeta) {
+			SkullMeta skullMeta = (SkullMeta) itemMeta;
+			skullMeta.setOwningPlayer(Bukkit.getOfflinePlayer(player.getName()));
+			itemMeta = skullMeta;
+		}
+		itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
 }

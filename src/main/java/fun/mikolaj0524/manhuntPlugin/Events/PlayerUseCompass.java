@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.*;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class PlayerUseCompass implements Listener {
 
@@ -26,9 +27,9 @@ public class PlayerUseCompass implements Listener {
 
 					if (nextRunner != null) {
 						playerSelected.put(player, nextRunner);
-						player.sendMessage(ChatColor.GREEN + "You are now tracking " + nextRunner.getName());
+						player.sendMessage(" \n " + prefix + ChatColor.GREEN + "You are now tracking " + nextRunner.getName() + " \n ");
 					} else {
-						player.sendMessage(ChatColor.RED + "No runners to track!");
+						player.sendMessage(" \n " + prefix + ChatColor.RED + "No runners to track! \n ");
 					}
 				}
 			}

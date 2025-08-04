@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.*;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameStatus;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
 
 public class PlayerJoin implements Listener {
 	@EventHandler
@@ -19,9 +20,9 @@ public class PlayerJoin implements Listener {
 		world = Bukkit.getWorld("world");
 		spawn = new Location(world, 0, world.getHighestBlockYAt(0, 0), 0, 90, 0);
 
+		Player player = event.getPlayer();
 		if(!gameStatus){
 			if(!spawnExist){ buildSpawn(); }
-			Player player = event.getPlayer();
 			player.setHealth(20.0);
 			Location loc = new Location(world, spawn.getX(), spawn.getY() + 1, spawn.getZ());
 			player.teleport(loc);
@@ -32,5 +33,6 @@ public class PlayerJoin implements Listener {
 			player.setInvisible(true);
 			player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 9));
 		}
+		huntersList.add(player);
 	}
 }
