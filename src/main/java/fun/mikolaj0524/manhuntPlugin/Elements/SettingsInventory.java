@@ -68,7 +68,7 @@ public class SettingsInventory implements Listener {
 
 		inventory.setItem(16,
 				createItemStack(Material.CLOCK,
-						"&b&lHunters release time:",
+						"&b&lMax game time:",
 						List.of(
 								"",
 								ChatColor.translateAlternateColorCodes('&', "&eCurrent: " + time),
