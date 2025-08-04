@@ -20,6 +20,7 @@ import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.compassLore;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
 import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
 import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class Game implements Listener {
 	public static boolean gameStatus = false;
@@ -28,7 +29,7 @@ public class Game implements Listener {
 	public static boolean releaseRunners = false;
 	public static int timeForRunners = 40;
 	private static int time = 0;
-	public static float borderSize = 60000000f;
+	public static float borderSize = 300f;
 
 	public static void timeCounter(){
 		new BukkitRunnable() {
@@ -57,7 +58,7 @@ public class Game implements Listener {
 									world.getWorldBorder().setCenter(0,0);
 								}
 								else{
-									world.getWorldBorder().setSize(borderSize);
+									world.getWorldBorder().setSize(60000000f);
 								}
 							}
 							break;
@@ -95,14 +96,12 @@ public class Game implements Listener {
 							releaseRunners = true;
 							break;
 					}
-
-
 					if(time < timeForRunners + 6 && time > 6){
 						for(Player player : huntersList){
 							player.sendTitle(ChatColor.GOLD + "" + (timeForRunners - (time - 6)), "");
 						}
 						for(Player player : runnersList){
-							player.sendMessage(ChatColor.GOLD + "Hunters will be released in " + (timeForRunners - (time - 6)) + " seconds!");
+							player.sendMessage("\n " + prefix + "Hunters will be released in " + (timeForRunners - (time - 6)) + " seconds!\n ");
 						}
 					}
 					if(time == timeForRunners + 6){
@@ -112,7 +111,7 @@ public class Game implements Listener {
 							player.setInvulnerable(false);
 						}
 						for(Player player : runnersList){
-							player.sendMessage(ChatColor.GREEN + "Hunters were released!");
+							player.sendMessage("\n " + prefix + "Hunters were released!\n ");
 						}
 						for(Player player : huntersList){
 							player.setInvisible(false);
@@ -126,7 +125,6 @@ public class Game implements Listener {
 						}
 						releaseHunters = true;
 					}
-
 
 				}
 				else{
@@ -165,7 +163,7 @@ public class Game implements Listener {
 				player.setGameMode(GameMode.ADVENTURE);
 				gameStatus = false;
 				player.teleport(loc);
-				player.sendMessage(ChatColor.GOLD + "Hunters team won!");
+				player.sendMessage("\n " + prefix + "Hunters team won!\n");
 				player.sendTitle(ChatColor.GOLD + "Hunters team won!", "");
 			}
 		}

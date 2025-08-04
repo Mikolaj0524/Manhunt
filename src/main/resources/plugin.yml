@@ -14,5 +14,5 @@ commands:
     usage: /<command> <add|remove|list> [player]
   startmanhunt:
     description: Start manhunt
-  type:
-    description: Changes type
+  settings:
+    description: Change settings of manhunt

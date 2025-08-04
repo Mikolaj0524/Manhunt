@@ -14,9 +14,10 @@ import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
 public class Timer {
 
 	public static int timer = 0;
+	public static int time = 8;
 
 	public static void Timer(){
-		int time = 8;
+
 
 		new BukkitRunnable() {
 			@Override

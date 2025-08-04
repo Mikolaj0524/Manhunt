@@ -34,7 +34,6 @@ public class Compass implements Listener {
 
 						if (!meta.hasLore() || !meta.getLore().contains(compassLore)) continue;
 
-						// Determine selected runner
 						Player selectedRunner = playerSelected.get(hunter);
 						if (selectedRunner == null || !runnersList.contains(selectedRunner)) {
 							selectedRunner = getClosestRunner(hunter);
@@ -43,21 +42,21 @@ public class Compass implements Listener {
 
 						if (selectedRunner == null) continue;
 
-						// Determine target location
 						Location targetLocation;
 						if (!hunter.getWorld().equals(selectedRunner.getWorld())) {
 							targetLocation = runnerPortalLocations.get(selectedRunner);
-						} else {
+						}
+						else {
 							targetLocation = selectedRunner.getLocation();
 						}
 
 						if (targetLocation == null) continue;
 
-						// Update compass tracking
 						if (hunter.getWorld().getEnvironment() == World.Environment.NETHER || hunter.getWorld().getEnvironment() == World.Environment.THE_END) {
 							meta.setLodestone(targetLocation);
 							meta.setLodestoneTracked(false);
-						} else {
+						}
+						else {
 							hunter.setCompassTarget(targetLocation);
 							if (meta.hasLodestone()) {
 								meta.setLodestone(null);
@@ -65,7 +64,6 @@ public class Compass implements Listener {
 							}
 						}
 
-						// Update name & lore
 						double distance = hunter.getLocation().distance(targetLocation);
 						meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Tracking: " + ChatColor.WHITE + selectedRunner.getName()
 								+ ChatColor.GRAY + " | " + ChatColor.GREEN + "" + ChatColor.BOLD + (int) distance + ChatColor.GREEN + "m");
@@ -78,7 +76,7 @@ public class Compass implements Listener {
 					}
 				}
 			}
-		}.runTaskTimer(getPluginInstance(), 0L, 20L); // Every second
+		}.runTaskTimer(getPluginInstance(), 0L, 20L);
 	}
 
 	private static Player getClosestRunner(Player hunter) {

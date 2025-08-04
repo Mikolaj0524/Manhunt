@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 	public static ArrayList<Player> huntersList = new ArrayList<>();
@@ -25,76 +26,90 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 		Player player = (Player) sender;
 
 		if (command.getName().equalsIgnoreCase("hunters")) {
-			handleCommand(player, args, "hunter");
+			if(player.hasPermission("manhunt.players")){
+				handleCommand(player, args, "hunter");
+			}
+			else{
+				noPermsMessage(player, "manhunt.players");
+			}
 			return true;
 		}
 
 		if (command.getName().equalsIgnoreCase("runners")) {
-			handleCommand(player, args, "runner");
+			if(player.hasPermission("manhunt.players")){
+				handleCommand(player, args, "runner");
+			}
+			else {
+				noPermsMessage(player, "manhunt.players");
+			}
 			return true;
 		}
 
 		if (command.getName().equalsIgnoreCase("startmanhunt")) {
-			startGame();
+			if(player.hasPermission("manhunt.start")){
+				startGame();
+			}
+			else{
+				noPermsMessage(player, "manhunt.start");
+			}
 			return true;
 		}
 
-		if (command.getName().equalsIgnoreCase("type")) {
-			changeGameType(player);
+		if (command.getName().equalsIgnoreCase("settings")) {
+			if(player.hasPermission("manhunt.settings")){
+				SettingsInventory.createInventory(player);
+			}
+			else{
+				noPermsMessage(player, "manhunt.settings");
+			}
 			return true;
 		}
 
 		return false;
 	}
 
-	private void changeGameType(Player p){
-		if(gameType){
-			gameType = false;
-			borderSize = 300.0f;
-		}
-		else{
-			gameType = true;
-			borderSize = 60000000f;
-		}
-
-		p.sendMessage(ChatColor.AQUA + "Current manhunt type: " + (gameType ? "NORMAL" : "HUNT"));
+	private void noPermsMessage(Player player, String perm){
+		player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&bYou don’t have the <" + perm + "> permission.\n "));
 	}
 
 	private void handleCommand(Player player, String[] args, String type) {
 		ArrayList<Player> list = type.equals("hunter") ? huntersList : runnersList;
 
 		if (args.length == 0) {
-			player.sendMessage(ChatColor.RED + "Usage: /" + type + "s <add|remove|list> [player]");
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&cUsage: /" + type + "s <add|remove|list> [player]\n "));
 			return;
 		}
 
 		if (args[0].equalsIgnoreCase("add") && args.length >= 2) {
 			Player p = Bukkit.getPlayer(args[1]);
 			if (p == null) {
-				player.sendMessage(ChatColor.RED + "Player not found.");
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&cPlayer not found.\n "));
 				return;
 			}
 			if (!list.contains(p)) {
 				list.add(p);
-				player.sendMessage(ChatColor.GREEN + "Added " + p.getName() + " to " + type + "s.");
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&aAdded " + p.getName() + " to " + type + "s.\n "));
 			}
-		} else if (args[0].equalsIgnoreCase("remove") && args.length >= 2) {
+		}
+		else if (args[0].equalsIgnoreCase("remove") && args.length >= 2) {
 			Player p = Bukkit.getPlayer(args[1]);
 			if (p == null) {
-				player.sendMessage(ChatColor.RED + "Player not found.");
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&cPlayer not found.\n "));
 				return;
 			}
 			if (list.contains(p)) {
 				list.remove(p);
-				player.sendMessage(ChatColor.YELLOW + "Removed " + p.getName() + " from " + type + "s.");
+				player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&eRemoved " + p.getName() + " from " + type + "s.\n "));
 			}
-		} else if (args[0].equalsIgnoreCase("list")) {
-			player.sendMessage(ChatColor.GREEN + type.substring(0, 1).toUpperCase() + type.substring(1) + "s:");
+		}
+		else if (args[0].equalsIgnoreCase("list")) {
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&',"\n"+ prefix + "&a" + type.substring(0, 1).toUpperCase() + type.substring(1) + "s:\n "));
 			for (Player p : list) {
 				player.sendMessage("- " + p.getName());
 			}
-		} else {
-			player.sendMessage(ChatColor.RED + "Invalid subcommand.");
+		}
+		else {
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&cInvalid subcommand.\n "));
 		}
 	}
 
@@ -106,16 +121,15 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 			completeList.add("add");
 			completeList.add("remove");
 			completeList.add("list");
-		} else if (args.length == 2) {
+		}
+		else if (args.length == 2) {
 			boolean isHunters = command.getName().equalsIgnoreCase("hunters");
-
 			List<String> selfList = (isHunters ? huntersList : runnersList).stream()
 					.map(Player::getName)
 					.toList();
 			List<String> oppositeList = (isHunters ? runnersList : huntersList).stream()
 					.map(Player::getName)
 					.toList();
-
 			if (args[0].equalsIgnoreCase("add")) {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					String name = p.getName();
@@ -123,7 +137,8 @@ public class PlayerManager implements Listener, CommandExecutor, TabExecutor {
 						completeList.add(name);
 					}
 				}
-			} else if (args[0].equalsIgnoreCase("remove")) {
+			}
+			else if (args[0].equalsIgnoreCase("remove")) {
 				completeList.addAll(selfList);
 			}
 		}
