@@ -6,13 +6,5 @@ authors: [ Mikolaj0524 ]
 description: plugin
 website: https://mikolaj0524.fun
 commands:
-  hunters:
-    description: Manage hunters
-    usage: /<command> <add|remove|list> [player]
-  runners:
-    description: Manage runners
-    usage: /<command> <add|remove|list> [player]
-  startmanhunt:
-    description: Start manhunt
-  settings:
-    description: Change settings of manhunt
+  manhunt:
+    description: Manhunt panel
