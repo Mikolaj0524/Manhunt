@@ -30,39 +30,34 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 
 	public @Nullable String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
 
-		if(offlinePlayer != null && offlinePlayer.isOnline()){
+		if (offlinePlayer != null && offlinePlayer.isOnline()) {
 
-			if(params.equalsIgnoreCase("time")){
+			if (params.equalsIgnoreCase("time")) {
 				String minutes = String.valueOf(timer / 60);
 				String seconds = String.valueOf(timer % 60);
-				if(minutes.length() == 1){
+				if (minutes.length() == 1) {
 					minutes = "0" + minutes;
 				}
-				if(seconds.length() == 1){
+				if (seconds.length() == 1) {
 					seconds = "0" + seconds;
 				}
 				return minutes + ":" + seconds;
-			}
-			else if(params.equalsIgnoreCase("type")){
+			} else if (params.equalsIgnoreCase("type")) {
 				return gameType ? "ɴᴏʀᴍᴀʟ" : "ʜᴜɴᴛ";
-			}
-			else if(params.equalsIgnoreCase("wait")){
+			} else if (params.equalsIgnoreCase("wait")) {
 				return "" + timeForRunners;
-			}
-			else if(params.equalsIgnoreCase("worldborder")){
+			} else if (params.equalsIgnoreCase("worldborder")) {
 				return "" + borderSize;
-			}
-			else if(params.startsWith("runnersList")){
+			} else if (params.startsWith("runnersList")) {
 				int id = Integer.parseInt(params.substring(params.length() - 1));
-				if(id < runnersList.size()){
+				if (id < runnersList.size()) {
 					return ChatColor.translateAlternateColorCodes('&', "&c  " + runnersList.get(id).getName());
 				}
 				return "";
-			}
-			else if(params.startsWith("huntersList")){
+			} else if (params.startsWith("huntersList")) {
 				int id = Integer.parseInt(params.substring(params.length() - 1));
 
-				if(id < huntersList.size()){
+				if (id < huntersList.size()) {
 					return ChatColor.translateAlternateColorCodes('&', "&a  " + huntersList.get(id).getName());
 				}
 				return "";
@@ -72,7 +67,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
 		return null;
 	}
 
-	public static void registerHook(){
+	public static void registerHook() {
 		new PlaceholderAPIHook().register();
 	}
 

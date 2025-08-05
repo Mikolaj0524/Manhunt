@@ -4,6 +4,7 @@ main: fun.mikolaj0524.manhuntPlugin.ManhuntPlugin
 api-version: '1.21'
 authors: [ Mikolaj0524 ]
 description: plugin
+load: STARTUP
 website: https://mikolaj0524.fun
 commands:
   manhunt:

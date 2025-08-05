@@ -7,6 +7,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.naming.spi.DirectoryManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+
 import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.refreshCompass;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.timeCounter;
 
@@ -14,11 +21,71 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 
 	private static ManhuntPlugin pluginInstance;
 	public final static String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&b&lManhunt&7] &b» &7");
+	public final static String prefixConsole = " \n \t\u001B[97m[\u001B[36mManhunt\u001B[97m] \u001B[36m» \u001B[97m ";
 
 	@Override
 	public void onEnable() {
 		pluginInstance = this;
-		getServer().getLogger().info("Manhunt > start");
+		getServer().getLogger().info(prefixConsole + "Start!\n");
+
+
+		try {
+			Files.walkFileTree(Paths.get("./world"), new SimpleFileVisitor<>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+			});
+			getServer().getLogger().info(prefixConsole + "Deleted {world}! ");
+
+			Files.walkFileTree(Paths.get("./world_nether"), new SimpleFileVisitor<>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+			});
+			getServer().getLogger().info(prefixConsole + "Deleted {world_nether}! ");
+
+			Files.walkFileTree(Paths.get("./world_the_end"), new SimpleFileVisitor<>() {
+				@Override
+				public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+					Files.delete(file);
+					return FileVisitResult.CONTINUE;
+				}
+
+				@Override
+				public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+					Files.delete(dir);
+					return FileVisitResult.CONTINUE;
+				}
+			});
+			getServer().getLogger().info(prefixConsole + "Deleted {world_the_end}! ");
+		}
+		catch (IOException e) {
+			getServer().getLogger().info(prefixConsole + "Error deleting folder: {" + e.getMessage() + "}!\n ");
+		}
+
+		try {
+			Thread.sleep(9000);
+		}
+		catch (InterruptedException e) {
+			getServer().getLogger().info(prefixConsole + "Error: {" + e.getMessage() + "}! \n");
+
+		}
 
 		getServer().getPluginManager().registerEvents(this, this);
 
@@ -47,7 +114,7 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 
 	@Override
 	public void onDisable() {
-		getServer().getLogger().info("Manhunt > stop");
+		getServer().getLogger().info(prefixConsole + "Stop!\n");
 	}
 
 	public static ManhuntPlugin getPluginInstance(){
