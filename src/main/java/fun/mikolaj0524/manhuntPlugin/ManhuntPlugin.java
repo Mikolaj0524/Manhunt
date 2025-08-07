@@ -100,6 +100,7 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new InventoryClick(), this);
 		getServer().getPluginManager().registerEvents(new Advancement(), this);
 		getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
+		getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
 
 		getCommand("manhunt").setExecutor(new PlayerManager());
 

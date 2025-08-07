@@ -20,7 +20,7 @@ public class EntityDeath implements Listener {
 			for(Player player : Bukkit.getOnlinePlayers()){
 				Location loc = new Location(Bukkit.getWorld("world"), spawn.getX(), spawn.getY() + 1, spawn.getZ());
 				player.teleport(loc);
-				player.sendMessage(" \n " + prefix + ChatColor.GOLD + "Runners team won! \n ");
+				player.sendMessage(" \n " + prefix + "Runners team won! \n ");
 				player.sendTitle(ChatColor.GOLD + "Runners team won!", "");
 			}
 		}

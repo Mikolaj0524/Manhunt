@@ -25,7 +25,7 @@ public class EntityDamage implements Listener {
 					event.setCancelled(true);
 					player.setGameMode(GameMode.SPECTATOR);
 					for(Player player1 : Bukkit.getOnlinePlayers()){
-						player1.sendMessage(" \n " + prefix + ChatColor.RED + player.getDisplayName() + " died! \n ");
+						player1.sendMessage(prefix + " " + player.getDisplayName() + " died! \n ");
 					}
 					checkIsEndGame();
 				}
