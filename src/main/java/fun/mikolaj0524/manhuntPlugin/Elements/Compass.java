@@ -1,8 +1,12 @@
 package fun.mikolaj0524.manhuntPlugin.Elements;
 
+import fun.mikolaj0524.manhuntPlugin.Events.PlayerPortal;
+import fun.mikolaj0524.manhuntPlugin.Objects.RunnerWorld;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -18,7 +22,7 @@ public class Compass implements Listener {
 
 	public static String compassLore = ChatColor.GREEN + "Compass";
 	public static HashMap<Player, Player> playerSelected = new HashMap<>();
-	public static HashMap<Player, Location> runnerPortalLocations = new HashMap<>();
+	public static HashMap<Player, RunnerWorld> runnerWorld = new HashMap<>();
 
 	public static void refreshCompass() {
 		new BukkitRunnable() {
@@ -31,52 +35,67 @@ public class Compass implements Listener {
 
 					if (itemInHand != null && itemInHand.getType() == Material.COMPASS) {
 						if (!(itemInHand.getItemMeta() instanceof CompassMeta meta)) continue;
-
 						if (!meta.hasLore() || !meta.getLore().contains(compassLore)) continue;
-
 						Player selectedRunner = playerSelected.get(hunter);
 						if (selectedRunner == null || !runnersList.contains(selectedRunner)) {
 							selectedRunner = getClosestRunner(hunter);
 							playerSelected.put(hunter, selectedRunner);
 						}
-
 						if (selectedRunner == null) continue;
 
-						Location targetLocation;
-						if (!hunter.getWorld().equals(selectedRunner.getWorld())) {
-							targetLocation = runnerPortalLocations.get(selectedRunner);
+						World world = Bukkit.getWorld("world");
+						World nether = Bukkit.getWorld("world_nether");
+						World end = Bukkit.getWorld("world_the_end");
+
+						Location hunterLoc = hunter.getLocation();
+						Location runnerLoc = playerSelected.get(hunter).getLocation();
+
+						Location finalLoc = null;
+
+
+						if(hunterLoc.getWorld() == runnerLoc.getWorld()){
+							finalLoc = runnerLoc;
 						}
-						else {
-							targetLocation = selectedRunner.getLocation();
+						else{
+							RunnerWorld rw = runnerWorld.get(selectedRunner);
+
+							if(hunterLoc.getWorld().equals(world) && runnerLoc.getWorld().equals(nether)){
+								finalLoc = rw.getWorldNether();
+							}
+							else if(hunterLoc.getWorld().equals(nether) && runnerLoc.getWorld().equals(world)){
+								finalLoc = rw.getNetherWorld();
+							}
+							else if(hunterLoc.getWorld().equals(nether) && runnerLoc.getWorld().equals(end)){
+								finalLoc = rw.getNetherWorld();
+							}
+							else if(hunterLoc.getWorld().equals(world) && runnerLoc.getWorld().equals(end)){
+								finalLoc = rw.getWorldEnd();
+							}
+
 						}
 
-						if (targetLocation == null) continue;
-
-						if (hunter.getWorld().getEnvironment() == World.Environment.NETHER || hunter.getWorld().getEnvironment() == World.Environment.THE_END) {
-							meta.setLodestone(targetLocation);
-							meta.setLodestoneTracked(false);
-						}
-						else {
-							hunter.setCompassTarget(targetLocation);
+						if(finalLoc == null) continue;
+						double distance = hunterLoc.distance(finalLoc);
+						meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lTracking: &f"+ selectedRunner.getName() + "&7 | &a&l" + (int) distance + "&am"));
+						List<String> lore = new ArrayList<>();
+						lore.add(compassLore);
+						meta.setLore(lore);
+						World.Environment env = hunter.getWorld().getEnvironment();
+						if (env == World.Environment.NORMAL) {
 							if (meta.hasLodestone()) {
 								meta.setLodestone(null);
 								meta.setLodestoneTracked(false);
 							}
+							hunter.setCompassTarget(finalLoc);
+						} else {
+							meta.setLodestone(finalLoc);
+							meta.setLodestoneTracked(false);
 						}
-
-						double distance = hunter.getLocation().distance(targetLocation);
-						meta.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Tracking: " + ChatColor.WHITE + selectedRunner.getName()
-								+ ChatColor.GRAY + " | " + ChatColor.GREEN + "" + ChatColor.BOLD + (int) distance + ChatColor.GREEN + "m");
-
-						List<String> lore = new ArrayList<>();
-						lore.add(compassLore);
-						meta.setLore(lore);
-
 						itemInHand.setItemMeta(meta);
 					}
 				}
 			}
-		}.runTaskTimer(getPluginInstance(), 0L, 20L);
+		}.runTaskTimer(getPluginInstance(), 0L, 10L);
 	}
 
 	private static Player getClosestRunner(Player hunter) {
