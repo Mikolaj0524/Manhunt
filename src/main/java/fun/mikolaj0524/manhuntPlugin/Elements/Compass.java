@@ -1,12 +1,9 @@
 package fun.mikolaj0524.manhuntPlugin.Elements;
 
-import fun.mikolaj0524.manhuntPlugin.Events.PlayerPortal;
 import fun.mikolaj0524.manhuntPlugin.Objects.RunnerWorld;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.scheduler.BukkitRunnable;

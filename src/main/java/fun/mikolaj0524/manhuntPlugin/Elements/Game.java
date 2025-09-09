@@ -148,12 +148,8 @@ public class Game implements Listener {
 	public static void startGame() {
 		gameStatus = true;
 		World world = Bukkit.getWorld("world");
-
-		if (world != null) {
-			System.out.println("Setting gamerules for world: " + world.getName());
-			world.setTime(1000);
-			world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-		}
+		world.setTime(1000);
+		world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
 	}
 
 	public static void preparePlayer(Player player){

@@ -21,7 +21,7 @@ public class PlayerDeath implements Listener {
 		if(runnersList.contains(player)){
 			runnersList.remove(player);
 			for(Player player1 : Bukkit.getOnlinePlayers()){
-				player1.sendMessage(prefix + " " + player.getDisplayName() + " died! \n ");
+				player1.sendMessage(prefix + player.getDisplayName() + " died! \n ");
 			}
 			Bukkit.getScheduler().runTask(getPluginInstance(), () -> {
 				if (!player.isOnline()) return;
