@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.*;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameStatus;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.deathRunners;
 import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
 
 public class PlayerJoin implements Listener {
@@ -33,6 +34,11 @@ public class PlayerJoin implements Listener {
 			player.setInvisible(true);
 			player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 9));
 		}
-		huntersList.add(player);
+		if(deathRunners.contains(player)){
+			player.setGameMode(GameMode.SPECTATOR);
+		}
+		else{
+			huntersList.add(player);
+		}
 	}
 }

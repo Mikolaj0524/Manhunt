@@ -14,6 +14,7 @@ import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 public class PlayerManager implements Listener, CommandExecutor {
 	public static ArrayList<Player> huntersList = new ArrayList<>();
 	public static ArrayList<Player> runnersList = new ArrayList<>();
+	public static ArrayList<Player> deathRunners = new ArrayList<>();
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
