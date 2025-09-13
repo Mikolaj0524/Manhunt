@@ -9,8 +9,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import static fun.mikolaj0524.manhuntPlugin.Elements.Communication.messageToPlayer;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.*;
-import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class PlayerUseCompass implements Listener {
 
@@ -19,17 +19,21 @@ public class PlayerUseCompass implements Listener {
 		Player player = event.getPlayer();
 		if (event.getAction().toString().contains("LEFT_CLICK") && player.getInventory().getItemInMainHand().getType() == Material.COMPASS) {
 			ItemStack itemInHand = player.getInventory().getItemInMainHand();
+
 			if (itemInHand != null && itemInHand.getType() == Material.COMPASS) {
+
 				ItemMeta meta = itemInHand.getItemMeta();
+
 				if (meta != null && meta.hasDisplayName() && meta.getLore().contains(compassLore)) {
 					Player currentSelectedRunner = playerSelected.get(player);
 					Player nextRunner = getNextRunner(currentSelectedRunner);
 
 					if (nextRunner != null) {
 						playerSelected.put(player, nextRunner);
-						player.sendMessage(" \n " + prefix + ChatColor.GREEN + "You are now tracking " + nextRunner.getName() + " \n ");
-					} else {
-						player.sendMessage(" \n " + prefix + ChatColor.RED + "No runners to track! \n ");
+						messageToPlayer(player, "&aYou are now tracking " + nextRunner.getName());
+					}
+					else {
+						messageToPlayer(player, "&cNo runners to track!");
 					}
 				}
 			}

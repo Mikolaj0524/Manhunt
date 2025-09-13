@@ -10,8 +10,8 @@ import org.bukkit.inventory.Inventory;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.timeForRunners;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
 import static fun.mikolaj0524.manhuntPlugin.Elements.SettingsInventory.*;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Timer.time;
 

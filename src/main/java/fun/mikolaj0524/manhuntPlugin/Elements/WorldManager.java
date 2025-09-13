@@ -3,7 +3,7 @@ package fun.mikolaj0524.manhuntPlugin.Elements;
 import org.bukkit.*;
 import org.bukkit.event.Listener;
 
-public class BeforeGame implements Listener {
+public class WorldManager implements Listener {
 
 	public static World world;
 	public static Location spawn;

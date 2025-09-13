@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
 
 public class BlockBreak implements Listener {
 

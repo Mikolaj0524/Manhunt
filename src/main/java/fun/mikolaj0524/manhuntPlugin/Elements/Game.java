@@ -1,25 +1,17 @@
 package fun.mikolaj0524.manhuntPlugin.Elements;
 
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.spawn;
-import static fun.mikolaj0524.manhuntPlugin.Elements.BeforeGame.world;
-import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.compassLore;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Communication.*;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.giveCompassToRunners;
+import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.*;
+import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
+import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.world;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class Game implements Listener {
@@ -39,93 +31,32 @@ public class Game implements Listener {
 					time++;
 					switch(time) {
 						case 1:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.DARK_RED + "5", "");
-								removeAllAdvancements(player);
-							}
-							for(Player player : runnersList){
-								preparePlayer(player);
-							}
-							for(Player player : huntersList){
-								preparePlayer(player);
-							}
+							titleToAll("&45");
+							removeAllAdvancements();
+							preparePlayers();
+							setupBorder();
 							break;
-						case 2:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.RED + "4", "");
-								if(!gameType){
-									world.getWorldBorder().setSize(borderSize);
-									world.getWorldBorder().setCenter(0,0);
-								}
-								else{
-									world.getWorldBorder().setSize(60000000f);
-								}
-							}
-							break;
-						case 3:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.GOLD + "3", "");
-							}
-							break;
-						case 4:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.YELLOW + "2", "");
-							}
-							break;
-						case 5:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.DARK_GREEN + "1", "");
-							}
-							break;
+						case 2: titleToAll("&c4"); break;
+						case 3: titleToAll("&63"); break;
+						case 4: titleToAll("&e2"); break;
+						case 5: titleToAll("&21"); break;
 						case 6:
-							for (Player player : Bukkit.getOnlinePlayers()) {
-								player.sendTitle(ChatColor.GREEN + "Runners released!", "");
-							}
-							for(Player player : runnersList){
-								player.setInvisible(false);
-								player.setInvulnerable(false);
-								for (PotionEffect effect : player.getActivePotionEffects()) {
-									player.removePotionEffect(effect.getType());
-								}
-								player.setInvulnerable(false);
-								player.setGameMode(GameMode.SURVIVAL);
-							}
-							for(Player player : huntersList){
-								giveCompass(player);
-							}
+							titleToAll("&aRunners released!");
+							releaseRunners();
+							giveCompassToRunners();
 							releaseRunners = true;
 							break;
 					}
 					if(time < timeForRunners + 6 && time > 6){
-						for(Player player : huntersList){
-							player.sendTitle(ChatColor.GOLD + "" + (timeForRunners - (time - 6)), "");
-						}
-						for(Player player : runnersList){
-							player.sendMessage("\n " + prefix + "Hunters will be released in " + (timeForRunners - (time - 6)) + " seconds!\n ");
-						}
+						titleToHunters("&6" + (timeForRunners - (time - 6)));
+						messageToRunners("Hunters will be released in " + (timeForRunners - (time - 6)) + " seconds!");
 					}
 					if(time == timeForRunners + 6){
-						for(Player player : huntersList){
-							player.sendTitle(ChatColor.GREEN + "GO!", "");
-							player.setInvisible(false);
-							player.setInvulnerable(false);
-						}
-						for(Player player : runnersList){
-							player.sendMessage("\n " + prefix + "Hunters were released!\n ");
-						}
-						for(Player player : huntersList){
-							player.setInvisible(false);
-							player.setInvulnerable(false);
-							for (PotionEffect effect : player.getActivePotionEffects()) {
-								player.removePotionEffect(effect.getType());
-							}
-							player.setRespawnLocation(spawn);
-							player.setGameMode(GameMode.SURVIVAL);
-							player.setInvulnerable(false);
-						}
+						titleToHunters("&aGO!");
+						messageToRunners("Hunters released!");
+						releaseHunters();
 						releaseHunters = true;
 					}
-
 				}
 				else{
 					time = 0;
@@ -134,15 +65,14 @@ public class Game implements Listener {
 		}.runTaskTimer(getPluginInstance(), 0L, 20L);
 	}
 
-	public static void giveCompass(Player player){
-		ItemStack itemStack = new ItemStack(Material.COMPASS, 1);
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Compass");
-		List<String> lore = new ArrayList<>();
-		lore.add(compassLore);
-		itemMeta.setLore(lore);
-		itemStack.setItemMeta(itemMeta);
-		player.getInventory().setItem(8, itemStack);
+	public static void setupBorder(){
+		if(!gameType){
+			world.getWorldBorder().setSize(borderSize);
+			world.getWorldBorder().setCenter(0,0);
+		}
+		else{
+			world.getWorldBorder().setSize(60000000f);
+		}
 	}
 
 	public static void startGame() {
@@ -152,37 +82,32 @@ public class Game implements Listener {
 		world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, true);
 	}
 
-	public static void preparePlayer(Player player){
-		player.setFoodLevel(20);
-		player.setHealth(20);
-		player.setExp(0.0f);
-		player.setTotalExperience(0);
-	}
-
 	public static void checkIsEndGame(){
 		if(runnersList.size() <= 0){
+			Location loc = new Location(Bukkit.getWorld("world"), spawn.getX(), spawn.getY() + 1, spawn.getZ());
 			for(Player player : Bukkit.getOnlinePlayers()){
-				Location loc = new Location(Bukkit.getWorld("world"), spawn.getX(), spawn.getY() + 1, spawn.getZ());
 				player.setGameMode(GameMode.ADVENTURE);
 				gameStatus = false;
 				player.teleport(loc);
-				player.sendMessage("\n " + prefix + "Hunters team won!\n");
-				player.sendTitle(ChatColor.GOLD + "Hunters team won!", "");
+				messageToPlayer(player, "Hunters team won!");
+				titleToPlayer(player, "&6Hunters team won!");
 			}
 		}
 	}
 
-	public static void removeAllAdvancements(Player player) {
-		Iterator<Advancement> advancements = Bukkit.advancementIterator();
+	public static void gameEnd(Player player){
+		messageToAll(player.getDisplayName());
 
-		while (advancements.hasNext()) {
-			Advancement advancement = advancements.next();
-			AdvancementProgress progress = player.getAdvancementProgress(advancement);
-
-			for (String criterion : progress.getAwardedCriteria()) {
-				progress.revokeCriteria(criterion);
+		if(runnersList.contains(player)){
+			for(Player p : Bukkit.getOnlinePlayers()){
+				p.setGameMode(GameMode.ADVENTURE);
+				gameStatus = false;
+				p.teleport(spawn.clone().add(0, 1, 0));
+				messageToPlayer(p, "Runners team won!");
+				titleToPlayer(p, "&6Runners team won!");
 			}
 		}
 	}
+
 
 }

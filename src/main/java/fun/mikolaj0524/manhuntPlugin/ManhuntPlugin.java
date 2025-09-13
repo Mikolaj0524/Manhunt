@@ -1,26 +1,27 @@
 package fun.mikolaj0524.manhuntPlugin;
 
+import fun.mikolaj0524.manhuntPlugin.Commands.Manhunt;
 import fun.mikolaj0524.manhuntPlugin.Elements.*;
 import fun.mikolaj0524.manhuntPlugin.Events.*;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.naming.spi.DirectoryManager;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.refreshCompass;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.timeCounter;
+import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
+import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.world;
 
 public final class ManhuntPlugin extends JavaPlugin implements Listener {
 
 	private static ManhuntPlugin pluginInstance;
-	public final static String prefix = ChatColor.translateAlternateColorCodes('&', "&7[&b&lManhunt&7] &b» &7");
+	public final static String prefix = "&7[&b&lManhunt&7] &b» &7";
 	public final static String prefixConsole = " \n \t\u001B[97m[\u001B[36mManhunt\u001B[97m] \u001B[36m» \u001B[97m ";
 
 	@Override
@@ -28,6 +29,7 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 		pluginInstance = this;
 		getServer().getLogger().info(prefixConsole + "Start!\n");
 
+		/*
 
 		try {
 			Files.walkFileTree(Paths.get("./world"), new SimpleFileVisitor<>() {
@@ -87,6 +89,10 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 
 		}
 
+*/
+		world = Bukkit.getWorld("world");
+		spawn = new Location(world, 0, world.getHighestBlockYAt(0, 0), 0, 90, 0);
+
 		getServer().getPluginManager().registerEvents(this, this);
 
 		getServer().getPluginManager().registerEvents(new BlockBreak(), this);
@@ -102,7 +108,7 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
 		getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
 
-		getCommand("manhunt").setExecutor(new PlayerManager());
+		getCommand("manhunt").setExecutor(new Manhunt());
 
 		if(getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
 			PlaceholderAPIHook.registerHook();

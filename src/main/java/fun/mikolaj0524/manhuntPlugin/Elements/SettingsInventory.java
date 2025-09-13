@@ -13,8 +13,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.List;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Timer.*;
 
 public class SettingsInventory implements Listener {

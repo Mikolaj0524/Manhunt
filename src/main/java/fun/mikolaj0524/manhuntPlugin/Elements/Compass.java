@@ -6,14 +6,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+import static fun.mikolaj0524.manhuntPlugin.Elements.Communication.colorize;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.gameStatus;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.huntersList;
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.runnersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.huntersList;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
 
 public class Compass implements Listener {
 
@@ -73,7 +75,7 @@ public class Compass implements Listener {
 
 						if(finalLoc == null) continue;
 						double distance = hunterLoc.distance(finalLoc);
-						meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&b&lTracking: &f"+ selectedRunner.getName() + "&7 | &a&l" + (int) distance + "&am"));
+						meta.setDisplayName(colorize("&b&lTracking: &f"+ selectedRunner.getName() + "&7 | &a&l" + (int) distance + "&am"));
 						List<String> lore = new ArrayList<>();
 						lore.add(compassLore);
 						meta.setLore(lore);
@@ -93,6 +95,23 @@ public class Compass implements Listener {
 				}
 			}
 		}.runTaskTimer(getPluginInstance(), 0L, 10L);
+	}
+
+	public static void giveCompassToRunners(){
+		for(Player player : huntersList){
+			giveCompass(player);
+		}
+	}
+
+	public static void giveCompass(Player player){
+		ItemStack itemStack = new ItemStack(Material.COMPASS, 1);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Compass");
+		List<String> lore = new ArrayList<>();
+		lore.add(compassLore);
+		itemMeta.setLore(lore);
+		itemStack.setItemMeta(itemMeta);
+		player.getInventory().setItem(8, itemStack);
 	}
 
 	private static Player getClosestRunner(Player hunter) {

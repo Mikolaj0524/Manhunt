@@ -1,14 +1,13 @@
 package fun.mikolaj0524.manhuntPlugin.Events;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import static fun.mikolaj0524.manhuntPlugin.Elements.PlayerManager.*;
-import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.*;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Communication.messageToAll;
 
 public class PlayerQuit implements Listener {
 
@@ -20,9 +19,7 @@ public class PlayerQuit implements Listener {
 			deathRunners.add(player);
 			runnersList.remove(player);
 			player.setGameMode(GameMode.SPECTATOR);
-			for(Player player1 : Bukkit.getOnlinePlayers()){
-				player1.sendMessage(prefix + player.getDisplayName() + " died! \n ");
-			}
+			messageToAll(player.getDisplayName() + " died!");
 		}
 	}
 

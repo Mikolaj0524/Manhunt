@@ -1,42 +1,93 @@
 package fun.mikolaj0524.manhuntPlugin.Elements;
 
-import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
+import java.util.Iterator;
 
-import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
+import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.*;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Game.checkIsEndGame;
+import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
+import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
 
-public class PlayerManager implements Listener, CommandExecutor {
-	public static ArrayList<Player> huntersList = new ArrayList<>();
-	public static ArrayList<Player> runnersList = new ArrayList<>();
-	public static ArrayList<Player> deathRunners = new ArrayList<>();
+public class PlayerManager {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(sender instanceof Player player){
+	public static void playerGameEnd(Player player){
 
-			if (command.getName().equalsIgnoreCase("manhunt")) {
-				if(player.hasPermission("manhunt")){
-					SettingsInventory.createInventory(player);
-				}
-				else{
-					noPermsMessage(player, "manhunt");
-				}
-
-				return true;
-			}
-
+		if(runnersList.contains(player)){
+			runnersList.remove(player);
+			deathRunners.add(player);
+			player.setGameMode(GameMode.SPECTATOR);
 		}
-		return false;
+
+		Bukkit.getScheduler().runTaskLater(getPluginInstance(), () -> {
+			player.spigot().respawn();
+			player.teleport(spawn);
+		}, 10L);
+
+		checkIsEndGame();
 	}
 
-	private void noPermsMessage(Player player, String perm){
-		player.sendMessage(ChatColor.translateAlternateColorCodes('&', "\n"+ prefix + "&bYou don’t have the <" + perm + "> permission.\n "));
+	public static void preparePlayers(){
+
+		for(Player p : runnersList){
+			preparePlayer(p);
+		}
+		for(Player p : huntersList){
+			preparePlayer(p);
+		}
+	}
+
+	public static void preparePlayer(Player player){
+		player.setFoodLevel(20);
+		player.setHealth(20);
+		player.setExp(0.0f);
+		player.setTotalExperience(0);
+	}
+
+	public static void releaseHunters(){
+		for(Player player : huntersList){
+			player.setInvisible(false);
+			player.setInvulnerable(false);
+			for (PotionEffect effect : player.getActivePotionEffects()) {
+				player.removePotionEffect(effect.getType());
+			}
+			player.setRespawnLocation(spawn);
+			player.setGameMode(GameMode.SURVIVAL);
+			player.setInvulnerable(false);
+		}
+	}
+
+	public static void releaseRunners(){
+		for(Player player : runnersList){
+			player.setInvisible(false);
+			player.setInvulnerable(false);
+			for (PotionEffect effect : player.getActivePotionEffects()) {
+				player.removePotionEffect(effect.getType());
+			}
+			player.setInvulnerable(false);
+			player.setGameMode(GameMode.SURVIVAL);
+		}
+	}
+
+	public static void removeAllAdvancements() {
+		for(Player player : Bukkit.getOnlinePlayers()){
+			Iterator<Advancement> advancements = Bukkit.advancementIterator();
+
+			while (advancements.hasNext()) {
+				Advancement advancement = advancements.next();
+				AdvancementProgress progress = player.getAdvancementProgress(advancement);
+
+				for (String criterion : progress.getAwardedCriteria()) {
+					progress.revokeCriteria(criterion);
+				}
+			}
+		}
 	}
 
 }

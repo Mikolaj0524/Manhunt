@@ -5,7 +5,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
-import static fun.mikolaj0524.manhuntPlugin.Elements.Game.giveCompass;
+import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.giveCompass;
+
 
 public class PlayerRespawn implements Listener {
 
