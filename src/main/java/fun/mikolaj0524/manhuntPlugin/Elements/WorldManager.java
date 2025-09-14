@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 
 public class WorldManager implements Listener {
 
-	public static World world;
+	public static World world = Bukkit.getWorld("world");
 	public static Location spawn;
 	public static boolean spawnExist = false;
 

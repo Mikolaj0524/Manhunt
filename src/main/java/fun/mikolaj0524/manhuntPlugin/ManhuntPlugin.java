@@ -4,8 +4,6 @@ import fun.mikolaj0524.manhuntPlugin.Commands.Manhunt;
 import fun.mikolaj0524.manhuntPlugin.Elements.*;
 import fun.mikolaj0524.manhuntPlugin.Events.*;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,8 +13,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 import static fun.mikolaj0524.manhuntPlugin.Elements.Compass.refreshCompass;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.timeCounter;
-import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
-import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.world;
 
 public final class ManhuntPlugin extends JavaPlugin implements Listener {
 
@@ -28,8 +24,6 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 	public void onEnable() {
 		pluginInstance = this;
 		getServer().getLogger().info(prefixConsole + "Start!\n");
-
-		/*
 
 		try {
 			Files.walkFileTree(Paths.get("./world"), new SimpleFileVisitor<>() {
@@ -88,10 +82,6 @@ public final class ManhuntPlugin extends JavaPlugin implements Listener {
 			getServer().getLogger().info(prefixConsole + "Error: {" + e.getMessage() + "}! \n");
 
 		}
-
-*/
-		world = Bukkit.getWorld("world");
-		spawn = new Location(world, 0, world.getHighestBlockYAt(0, 0), 0, 90, 0);
 
 		getServer().getPluginManager().registerEvents(this, this);
 

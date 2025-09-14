@@ -19,6 +19,9 @@ public class PlayerJoin implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event){
 
+		world = Bukkit.getWorld("world");
+		spawn = new Location(world, 0, world.getHighestBlockYAt(0, 0), 0, 90, 0);
+
 		Player player = event.getPlayer();
 		if(!gameStatus){
 

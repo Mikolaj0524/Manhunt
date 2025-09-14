@@ -1,7 +1,6 @@
 package fun.mikolaj0524.manhuntPlugin.Elements;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -12,7 +11,6 @@ import static fun.mikolaj0524.manhuntPlugin.Elements.Communication.titleToPlayer
 import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
 import static fun.mikolaj0524.manhuntPlugin.Elements.Game.*;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
-import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class Timer {
 
@@ -20,7 +18,6 @@ public class Timer {
 	public static int time = 8;
 
 	public static void Timer(){
-
 
 		new BukkitRunnable() {
 			@Override

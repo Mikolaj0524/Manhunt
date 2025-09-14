@@ -12,7 +12,6 @@ import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.spawn;
 import static fun.mikolaj0524.manhuntPlugin.Elements.WorldManager.world;
 import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.getPluginInstance;
 import static fun.mikolaj0524.manhuntPlugin.Commands.Manhunt.runnersList;
-import static fun.mikolaj0524.manhuntPlugin.ManhuntPlugin.prefix;
 
 public class Game implements Listener {
 	public static boolean gameStatus = false;
