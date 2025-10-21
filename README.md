@@ -1,7 +1,7 @@
 # 🏹 Minecraft Manhunt Plugin
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/Mikolaj0524/ManhuntPlugin)
-![GitHub License](https://img.shields.io/github/license/Mikolaj0524/ManhuntPlugin)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Mikolaj0524/Manhunt)
+![GitHub License](https://img.shields.io/github/license/Mikolaj0524/Manhunt)
 ![PaperMC](https://img.shields.io/badge/Server-Paper%201.20+-blue)
 ![Java](https://img.shields.io/badge/Java-17+-orange)
 ![PlaceholderAPI](https://img.shields.io/badge/PlaceholderAPI-Supported-success)
@@ -102,8 +102,8 @@ Open the GUI control panel to start or configure your Manhunt session.
 ## 🧰 Building from Source
 
 ```bash
-git clone https://github.com/Mikolaj0524/ManhuntPlugin.git
-cd ManhuntPlugin
+git clone https://github.com/Mikolaj0524/Manhunt.git
+cd Manhunt
 mvn clean package
 ```
 
